@@ -52,8 +52,10 @@ namespace Entin.StaticData
             where TSheet : BaseSheet
             where TReceiver : FileReceiver<TSheet>
         {
-            if (typeof(TSheet).IsAssignableFrom(typeof(KeySheet<>)))
+#if UNITY_EDITOR
+            if (typeof(TSheet).BaseType?.GetGenericTypeDefinition() == typeof(KeySheet<>))
                 Debug.LogWarning($"Adding keyed sheet through non keyed method: {typeof(TSheet)}");
+#endif
 
             TReceiver receiver = Activator.CreateInstance<TReceiver>();
             Type type = GetGenericArgument(receiver);
