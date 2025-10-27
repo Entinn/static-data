@@ -1,0 +1,11 @@
+{
+  "name": "com.entin.staticdata",
+  "version": "1.0.0",
+  "displayName": "Static Data",
+  "description": "Static data getted from Google spreedsheet",
+  "author": {
+    "name": "Entin",
+    "email": "gkanton97@gmail.com",
+    "url": "https://www.unity3d.com"
+  }
+}
