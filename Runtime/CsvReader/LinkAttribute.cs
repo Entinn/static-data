@@ -3,7 +3,7 @@
 namespace Entin.StaticData.CsvReader
 {
     [AttributeUsage(AttributeTargets.Property)]
-    internal sealed class LinkAttribute : Attribute
+    public sealed class LinkAttribute : Attribute
     {
         public readonly Type Type;
         public readonly string FiledKey;

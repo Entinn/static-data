@@ -3,5 +3,5 @@
 namespace Entin.StaticData.CsvReader
 {
     [AttributeUsage(AttributeTargets.Property)]
-    internal sealed class UniqueAttribute : Attribute { }
+    public sealed class UniqueAttribute : Attribute { }
 }
