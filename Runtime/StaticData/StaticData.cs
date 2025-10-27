@@ -44,7 +44,7 @@ namespace Entin.StaticData
             Type type = GetGenericArgument(receiver);
 
             AddReceiver(type, receiver);
-
+            AddToKeyValueSheets<TReceiver, TSheet>(type, receiver);
         }
 
         public void Add<TReceiver, TSheet>()
