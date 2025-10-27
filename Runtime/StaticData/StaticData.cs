@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Entin.StaticData.Sheet;
@@ -176,12 +177,16 @@ namespace Entin.StaticData
         {
             List<T> result = new List<T>();
 
-            Type type = typeof(T);
-
-            foreach (var sheets in _allSheets)
+            foreach (var list in _allSheets.Values)
             {
-                if (type.IsAssignableFrom(sheets.Key))
-                    result.AddRange(sheets.Value as List<T>);
+                if (list is IEnumerable enumerable)
+                {
+                    foreach (object item in enumerable)
+                    {
+                        if (item is T typedItem)
+                            result.Add(typedItem);
+                    }
+                }
             }
 
             return result;
