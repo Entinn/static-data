@@ -237,8 +237,13 @@ namespace Entin.StaticData.CsvReader
 
             for (int y = 1; y < grid.GetLength(1); y++)
             {
-                List<string> row = Enumerable.Range(0, grid.GetLength(0)).Select(o => string.IsNullOrEmpty(grid[o, y]) ? "" : grid[o, y]).ToList();
-                dict.Add(row[0], row[1]);
+                string key = grid[0, y];
+                if (string.IsNullOrEmpty(key))
+                    continue;
+
+                string value = grid[1, y];
+                value = string.IsNullOrEmpty(value) ? "" : value;
+                dict.Add(key.ToLower(), value);
             }
 
             return dict;
