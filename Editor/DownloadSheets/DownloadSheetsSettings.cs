@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Entin.StaticData.DownloadSheets.Editor
 {
-    [CreateAssetMenu(fileName = "StaticDataGoogleSheetSettings", menuName = "ScriptableObjects/DownloadSheetsSettings", order = 1)]
+    [CreateAssetMenu(fileName = "StaticDataGoogleSheetSettings", menuName = "Entin/Static Data/StaticDataGoogleSheetSettings", order = 1)]
     public class DownloadSheetsSettings : ScriptableObject
     {
         public string TableId;

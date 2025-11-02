@@ -13,7 +13,7 @@ namespace Entin.StaticData.DownloadSheets.Editor
         private static DownloadSheetsSettings settings;
 
         private const string UrlPattern = "https://docs.google.com/spreadsheets/d/{0}/export?format=csv&gid={1}";
-        private const string SettingsFilePath = "DownloadSheetsSettings.asset";
+        private const string SettingsFilePath = "StaticDataGoogleSheetSettings.asset";
 
         private SerializedObject _so;
 
@@ -41,7 +41,7 @@ namespace Entin.StaticData.DownloadSheets.Editor
 
             if (settings == null)
             {
-                EditorGUILayout.LabelField("Create settings file");
+                EditorGUILayout.LabelField("Create 'StaticDataGoogleSheetSettings.asset' in 'Editor Default Resources' folder");
                 return;
             }
 
