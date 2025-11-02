@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
 using Entin.StaticData.CsvReader;
@@ -39,7 +40,7 @@ namespace Entin.StaticData.Attributes
 
                 if (canBeEmpty)
                 {
-                    if (value2 == default)
+                    if (value2 == null)
                         have = true;
 
                     if (value2 is string text)
@@ -49,9 +50,22 @@ namespace Entin.StaticData.Attributes
                     }
                 }
 
-                foreach (BaseSheet item in staticData.GetAll<BaseSheet>())
+                if (!staticData.TryGet(type, out IList sheets))
                 {
-                    object value1 = type.GetProperty(propertyKey).GetValue(item);
+                    onError("Static data don't have " + type);
+                    return;
+                }
+
+                foreach (var item in sheets)
+                {
+                    PropertyInfo property = type.GetProperty(propertyKey);
+                    if (property == null)
+                    {
+                        onError($"No property with key {propertyKey}, in table {type}");
+                        return;
+                    }
+
+                    object value1 = property.GetValue(item);
                     if (!value1.Equals(value2))
                         continue;
 

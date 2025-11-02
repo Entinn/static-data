@@ -175,6 +175,18 @@ namespace Entin.StaticData
             return sheets as List<TSheet>;
         }
 
+        public bool TryGet(Type type, out IList sheets)
+        {
+            if (_allSheets.TryGetValue(type, out object sheetsToReturn))
+            {
+                sheets = sheetsToReturn as IList;
+                return true;
+            }
+
+            sheets = null;
+            return false;
+        }
+
         public IReadOnlyCollection<T> GetAll<T>()
         {
             List<T> result = new List<T>();
