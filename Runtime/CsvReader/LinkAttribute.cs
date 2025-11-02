@@ -6,13 +6,13 @@ namespace Entin.StaticData.CsvReader
     public sealed class LinkAttribute : Attribute
     {
         public readonly Type Type;
-        public readonly string FiledKey;
+        public readonly string PropertyKey;
         public readonly bool CanBeEmpty;
 
-        public LinkAttribute(Type type, string filedKey, bool canBeEmpty = false)
+        public LinkAttribute(Type type, string propertyKey, bool canBeEmpty = false)
         {
             Type = type;
-            FiledKey = filedKey;
+            PropertyKey = propertyKey;
             CanBeEmpty = canBeEmpty;
         }
     }
