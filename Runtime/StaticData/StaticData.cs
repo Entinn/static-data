@@ -45,7 +45,7 @@ namespace Entin.StaticData
             Type type = GetGenericArgument(receiver);
 
             AddReceiver(type, receiver);
-            AddToKeyValueSheets<TReceiver, TSheet>(type, receiver);
+            AddToKeyValueAndAllSheets<TReceiver, TSheet>(type, receiver);
         }
 
         public void Add<TReceiver, TSheet>()
@@ -92,7 +92,7 @@ namespace Entin.StaticData
             }
         }
 
-        private void AddToKeyValueSheets<TReceiver, TSheet>(Type type, TReceiver receiver)
+        private void AddToKeyValueAndAllSheets<TReceiver, TSheet>(Type type, TReceiver receiver)
             where TSheet : KeyValueSheet
             where TReceiver : KeyValueFileReceiver<TSheet>
         {
@@ -100,6 +100,8 @@ namespace Entin.StaticData
 
             if (!_keyValueSheets.TryAdd(type, receiverItems))
                 Debug.LogError("Key value sheet already added " + type);
+
+            _allSheets.Add(type, new List<TSheet>() {receiverItems});
         }
 
         private TextAsset GetFile(string fileName)
