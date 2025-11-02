@@ -156,7 +156,7 @@ namespace Entin.StaticData.CsvReader
             if (type == typeof(Vector2Int))
             {
                 string[] temp = valueStr.Split(';', ',', '.');
-                return new Vector2(int.Parse(temp[0]), int.Parse(temp[1]));
+                return new Vector2Int(int.Parse(temp[0]), int.Parse(temp[1]));
             }
 
             if (string.IsNullOrEmpty(valueStr) && (type == typeof(int) || type == typeof(float) || type == typeof(decimal)))
