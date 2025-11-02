@@ -12,6 +12,8 @@ namespace Entin.StaticData.Attributes
         {
             Validators.Add(new UniquenessValidator());
             Validators.Add(new LinksValidator());
+            Validators.Add(new MoreLessValidator());
+            Validators.Add(new MinMaxValidator());
         }
 
         public static void Validate<TSheet>(StaticData staticData, Action<string> onError)
