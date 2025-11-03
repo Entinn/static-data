@@ -1,4 +1,4 @@
 namespace Entin.StaticData.Sheet
 {
-    public abstract class KeyValueSheet { }
+    public abstract class KeyValueSheet : BaseSheet { }
 }
