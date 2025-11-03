@@ -70,7 +70,7 @@ namespace Entin.StaticData.Attributes
                 {
                     string operation = isLessThan
                         ? (orEqual ? "less or equal" : "less")
-                        : (orEqual ? "move or equal" : "move");
+                        : (orEqual ? "more or equal" : "more");
 
                     onError($"{propertyInfo.Name} should be {operation} {propertyKey}");
                 }

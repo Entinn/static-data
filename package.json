@@ -1,6 +1,6 @@
 {
   "name": "com.entin.staticdata",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Static Data",
   "description": "Static data getted from Google spreedsheet",
   "author": {
