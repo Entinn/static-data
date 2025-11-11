@@ -10,8 +10,8 @@ namespace Entin.StaticData
 {
     public interface IStaticData
     {
-        IReadOnlyCollection<TSheet> Get<TSheet>() where TSheet : BaseSheet;
-        IReadOnlyCollection<TSheet> GetAll<TSheet>();
+        IReadOnlyList<TSheet> Get<TSheet>() where TSheet : BaseSheet;
+        IReadOnlyList<TSheet> GetAll<TSheet>();
         IReadOnlyDictionary<TKey, TSheet> GetKeyed<TKey, TSheet>() where TSheet : KeySheet<TKey>;
         TSheet GetKeyed<TKey, TSheet>(TKey key) where TSheet : KeySheet<TKey>;
         T GetKeyValue<T>() where T : KeyValueSheet;
@@ -170,7 +170,7 @@ namespace Entin.StaticData
             return types.First();
         }
 
-        public IReadOnlyCollection<TSheet> Get<TSheet>() where TSheet : BaseSheet
+        public IReadOnlyList<TSheet> Get<TSheet>() where TSheet : BaseSheet
         {
             Type type = typeof(TSheet);
 
@@ -192,7 +192,7 @@ namespace Entin.StaticData
             return false;
         }
 
-        public IReadOnlyCollection<T> GetAll<T>()
+        public IReadOnlyList<T> GetAll<T>()
         {
             List<T> result = new List<T>();
 
