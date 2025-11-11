@@ -1,4 +1,18 @@
 {
-	"name": "entin.static-data.editor",
-	"references":[ "GUID:9ce1e9f7fbbbb534382529e3cb4c275e" ]
+    "name": "entin.static-data.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9ce1e9f7fbbbb534382529e3cb4c275e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
