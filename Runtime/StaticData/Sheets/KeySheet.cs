@@ -5,6 +5,6 @@ namespace Entin.StaticData.Sheet
     public abstract class KeySheet<TKey> : BaseSheet
     {
         [Unique]
-        public TKey Key { get; }
+        public virtual TKey Key { get; }
     }
 }
