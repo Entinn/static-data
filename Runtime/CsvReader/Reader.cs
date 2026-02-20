@@ -90,6 +90,9 @@ namespace Entin.StaticData.CsvReader
 
             foreach (var property in allProperties)
             {
+                if (Attribute.IsDefined(property, typeof(IgnoreAttribute)))
+                    continue;
+
                 var name = property.Name.ToLower();
                 if (valuesDict.ContainsKey(name))
                 {
