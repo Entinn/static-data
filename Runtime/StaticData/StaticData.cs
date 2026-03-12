@@ -243,7 +243,7 @@ namespace Entin.StaticData
                         {
                             string warningText = $"Validation has warnings in table {receiver.FileName}. Watch below.\n";
                             warningText += receiver.ValidationResult.WarningText;
-                            Debug.LogError(warningText);
+                            Debug.LogWarning(warningText);
                         }
 
                         if (receiver.ValidationResult.HasError)
