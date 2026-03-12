@@ -238,11 +238,19 @@ namespace Entin.StaticData
                     foreach (var receiver in receivers.Value)
                     {
                         receiver.Validate(this);
-                        if (receiver.HasError)
+
+                        if (receiver.ValidationResult.HasWarning)
+                        {
+                            string warningText = $"Validation has warnings in table {receiver.FileName}. Watch below.\n";
+                            warningText += receiver.ValidationResult.WarningText;
+                            Debug.LogError(warningText);
+                        }
+
+                        if (receiver.ValidationResult.HasError)
                         {
                             wasError = true;
                             string errorText = $"Validation failed in table {receiver.FileName}. Watch errors below.\n";
-                            errorText += receiver.ErrorText;
+                            errorText += receiver.ValidationResult.ErrorText;
                             Debug.LogError(errorText);
                         }
                     }

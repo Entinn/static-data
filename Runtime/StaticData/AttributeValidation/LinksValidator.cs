@@ -4,12 +4,13 @@ using System.Linq;
 using System.Reflection;
 using Entin.StaticData.CsvReader;
 using Entin.StaticData.Sheet;
+using Entin.StaticData.Validation;
 
 namespace Entin.StaticData.Attributes
 {
     public class LinksValidator : IAttributeValidator
     {
-        public void Validate<TSheet>(StaticData staticData, Action<string> onError)
+        public void Validate<TSheet>(StaticData staticData, ValidationResult validationResult)
             where TSheet : BaseSheet
         {
             foreach (PropertyInfo propertyInfo in typeof(TSheet).GetProperties())
@@ -19,17 +20,17 @@ namespace Entin.StaticData.Attributes
                 foreach (var attribute in linkAttributes)
                 {
                     if (attribute is LinkAttribute linkAttribute)
-                        ValidateLinks<TSheet>(propertyInfo, staticData, linkAttribute.Type, linkAttribute.PropertyKey, linkAttribute.CanBeEmpty, onError);
+                        ValidateLinks<TSheet>(propertyInfo, staticData, linkAttribute.Type, linkAttribute.PropertyKey, linkAttribute.CanBeEmpty, validationResult);
                 }
             }
         }
 
-        private void ValidateLinks<TSheet>(PropertyInfo propertyInfo, StaticData staticData, Type type, string propertyKey, bool canBeEmpty, Action<string> onError)
+        private void ValidateLinks<TSheet>(PropertyInfo propertyInfo, StaticData staticData, Type type, string propertyKey, bool canBeEmpty, ValidationResult validationResult)
             where TSheet : BaseSheet
         {
             if (!staticData.Receivers.ContainsKey(type))
             {
-                onError("Static data don't have " + type);
+                validationResult.AddError("Static data don't have " + type);
                 return;
             }
 
@@ -52,7 +53,7 @@ namespace Entin.StaticData.Attributes
 
                 if (!staticData.TryGet(type, out IList sheets))
                 {
-                    onError("Static data don't have " + type);
+                    validationResult.AddError("Static data don't have " + type);
                     return;
                 }
 
@@ -61,7 +62,7 @@ namespace Entin.StaticData.Attributes
                     PropertyInfo property = type.GetProperty(propertyKey);
                     if (property == null)
                     {
-                        onError($"No property with key {propertyKey}, in table {type}");
+                        validationResult.AddError($"No property with key {propertyKey}, in table {type}");
                         return;
                     }
 
@@ -75,7 +76,7 @@ namespace Entin.StaticData.Attributes
 
                 if (!have)
                 {
-                    onError($"No one {value2} in {type}");
+                    validationResult.AddError($"No one {value2} in {type}");
                 }
             }
         }

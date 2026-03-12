@@ -1,8 +1,8 @@
 {
   "name": "com.entin.staticdata",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "displayName": "Static Data",
-  "description": "Static data getted from Google spreedsheet",
+  "description": "Static data got from Google Sheet",
   "author": {
     "name": "Entin",
     "email": "gkanton97@gmail.com",

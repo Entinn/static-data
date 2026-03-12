@@ -17,7 +17,7 @@ namespace Entin.StaticData.DownloadSheets.Editor
 
         private SerializedObject _so;
 
-        [MenuItem("Entin/Static Data/Open window")]
+        [MenuItem("Entin/Static Data/Google Sheets/Open window")]
         private static void Init()
         {
             TryLoadSettings();
@@ -68,7 +68,7 @@ namespace Entin.StaticData.DownloadSheets.Editor
             _so.ApplyModifiedProperties();
         }
 
-        [MenuItem("Entin/Static Data/Update files")]
+        [MenuItem("Entin/Static Data/Google Sheets/Update files")]
         private static void UpdateFiles()
         {
             if (TryLoadSettings())

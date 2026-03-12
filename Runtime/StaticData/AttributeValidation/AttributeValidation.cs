@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Entin.StaticData.Sheet;
+using Entin.StaticData.Validation;
 
 namespace Entin.StaticData.Attributes
 {
@@ -16,11 +16,11 @@ namespace Entin.StaticData.Attributes
             Validators.Add(new MinMaxValidator());
         }
 
-        public static void Validate<TSheet>(StaticData staticData, Action<string> onError)
+        public static void Validate<TSheet>(StaticData staticData, ValidationResult validationResult)
             where TSheet : BaseSheet
         {
             foreach (IAttributeValidator attributeValidator in Validators)
-                attributeValidator.Validate<TSheet>(staticData, onError);
+                attributeValidator.Validate<TSheet>(staticData, validationResult);
         }
     }
 }

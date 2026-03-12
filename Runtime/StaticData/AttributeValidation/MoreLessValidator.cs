@@ -2,12 +2,13 @@ using System;
 using System.Reflection;
 using Entin.StaticData.CsvReader;
 using Entin.StaticData.Sheet;
+using Entin.StaticData.Validation;
 
 namespace Entin.StaticData.Attributes
 {
     public class MoreLessValidator : IAttributeValidator
     {
-        public void Validate<TSheet>(StaticData staticData, Action<string> onError)
+        public void Validate<TSheet>(StaticData staticData, ValidationResult validationResult)
             where TSheet : BaseSheet
         {
             foreach (PropertyInfo propertyInfo in typeof(TSheet).GetProperties())
@@ -16,12 +17,12 @@ namespace Entin.StaticData.Attributes
 
                 foreach (var attribute in minAttributes)
                 {
-                    ValidateMoreOrLess<TSheet>(staticData, propertyInfo, attribute, onError);
+                    ValidateMoreOrLess<TSheet>(staticData, propertyInfo, attribute, validationResult);
                 }
             }
         }
 
-        private void ValidateMoreOrLess<TSheet>(StaticData staticData, PropertyInfo propertyInfo, Attribute attribute, Action<string> onError)
+        private void ValidateMoreOrLess<TSheet>(StaticData staticData, PropertyInfo propertyInfo, Attribute attribute, ValidationResult validationResult)
             where TSheet : BaseSheet
         {
             bool isLessThan = attribute is LessThanAttribute;
@@ -40,7 +41,7 @@ namespace Entin.StaticData.Attributes
                 PropertyInfo property = typeof(TSheet).GetProperty(propertyKey);
                 if (property == null)
                 {
-                    onError($"No property with key {propertyKey}, in table {typeof(TSheet)}");
+                    validationResult.AddError($"No property with key {propertyKey}, in table {typeof(TSheet)}");
                     return;
                 }
 
@@ -49,13 +50,13 @@ namespace Entin.StaticData.Attributes
 
                 if (value1 is not IComparable value1Comparable)
                 {
-                    onError($"Property with key {propertyInfo.Name} is not comparable");
+                    validationResult.AddError($"Property with key {propertyInfo.Name} is not comparable");
                     return;
                 }
 
                 if (value2 is not IComparable value2Comparable)
                 {
-                    onError($"Property with key {propertyKey} is not comparable");
+                    validationResult.AddError($"Property with key {propertyKey} is not comparable");
                     return;
                 }
 
@@ -72,7 +73,7 @@ namespace Entin.StaticData.Attributes
                         ? (orEqual ? "less or equal" : "less")
                         : (orEqual ? "more or equal" : "more");
 
-                    onError($"{propertyInfo.Name} should be {operation} {propertyKey}");
+                    validationResult.AddError($"{propertyInfo.Name} should be {operation} {propertyKey}");
                 }
             }
         }

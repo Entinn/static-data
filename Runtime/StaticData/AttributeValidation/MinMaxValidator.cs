@@ -2,12 +2,13 @@ using System;
 using System.Reflection;
 using Entin.StaticData.CsvReader;
 using Entin.StaticData.Sheet;
+using Entin.StaticData.Validation;
 
 namespace Entin.StaticData.Attributes
 {
     public class MinMaxValidator : IAttributeValidator
     {
-        public void Validate<TSheet>(StaticData staticData, Action<string> onError)
+        public void Validate<TSheet>(StaticData staticData, ValidationResult validationResult)
             where TSheet : BaseSheet
         {
             foreach (PropertyInfo propertyInfo in typeof(TSheet).GetProperties())
@@ -16,12 +17,12 @@ namespace Entin.StaticData.Attributes
 
                 foreach (var attribute in minAttributes)
                 {
-                    ValidateMinMax<TSheet>(staticData, propertyInfo, attribute, onError);
+                    ValidateMinMax<TSheet>(staticData, propertyInfo, attribute, validationResult);
                 }
             }
         }
 
-        private void ValidateMinMax<TSheet>(StaticData staticData, PropertyInfo propertyInfo, Attribute attribute, Action<string> onError)
+        private void ValidateMinMax<TSheet>(StaticData staticData, PropertyInfo propertyInfo, Attribute attribute, ValidationResult validationResult)
             where TSheet : BaseSheet
         {
             foreach (TSheet baseSheet in staticData.Get<TSheet>())
@@ -35,7 +36,7 @@ namespace Entin.StaticData.Attributes
                 {
                     if (value1 is not int intValue)
                     {
-                        onError($"Property with key {propertyInfo.Name} is not int");
+                        validationResult.AddError($"Property with key {propertyInfo.Name} is not int");
                         return;
                     }
 
@@ -44,11 +45,11 @@ namespace Entin.StaticData.Attributes
 
                     if (isMinInt && intValue < minInt.Min)
                     {
-                        onError($"{propertyInfo.Name} less than {minInt.Min}");
+                        validationResult.AddError($"{propertyInfo.Name} less than {minInt.Min}");
                     }
                     else if (isMaxInt && intValue > maxInt.Max)
                     {
-                        onError($"{propertyInfo.Name} more than {maxInt.Max}");
+                        validationResult.AddError($"{propertyInfo.Name} more than {maxInt.Max}");
                     }
                 }
 
@@ -59,7 +60,7 @@ namespace Entin.StaticData.Attributes
                 {
                     if (value1 is not float floatValue)
                     {
-                        onError($"Property with key {propertyInfo.Name} is not float");
+                        validationResult.AddError($"Property with key {propertyInfo.Name} is not float");
                         return;
                     }
 
@@ -68,11 +69,11 @@ namespace Entin.StaticData.Attributes
 
                     if (isMinFloat && floatValue < minFloat.Min)
                     {
-                        onError($"{propertyInfo.Name} less than {minFloat.Min}");
+                        validationResult.AddError($"{propertyInfo.Name} less than {minFloat.Min}");
                     }
                     else if (isMaxFloat && floatValue > maxFloat.Max)
                     {
-                        onError($"{propertyInfo.Name} more than {maxFloat.Max}");
+                        validationResult.AddError($"{propertyInfo.Name} more than {maxFloat.Max}");
                     }
                 }
             }

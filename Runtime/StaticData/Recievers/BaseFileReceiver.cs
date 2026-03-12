@@ -1,4 +1,5 @@
 using Entin.StaticData.Attributes;
+using Entin.StaticData.Validation;
 
 namespace Entin.StaticData.Sheet.Receivers
 {
@@ -6,8 +7,8 @@ namespace Entin.StaticData.Sheet.Receivers
         where TSheet : BaseSheet
     {
         public string FileName { get; }
-        public bool HasError { get; private set; }
-        public string ErrorText { get; private set; }
+
+        public ValidationResult ValidationResult { get; } = new ValidationResult();
 
         protected internal BaseFileReceiver(string fileName)
         {
@@ -17,20 +18,14 @@ namespace Entin.StaticData.Sheet.Receivers
         public void Validate(StaticData staticData)
         {
             ValidateAttributes(staticData);
-            ValidateData(staticData);
+            ValidateData(staticData, ValidationResult);
         }
 
-        protected abstract void ValidateData(StaticData staticData);
+        protected abstract void ValidateData(StaticData staticData, ValidationResult validationResult);
 
         private void ValidateAttributes(StaticData staticData)
         {
-            AttributeValidation.Validate<TSheet>(staticData, AddError);
-        }
-
-        protected void AddError(string text)
-        {
-            HasError = true;
-            ErrorText += $"---> {text}\n";
+            AttributeValidation.Validate<TSheet>(staticData, ValidationResult);
         }
     }
 }
