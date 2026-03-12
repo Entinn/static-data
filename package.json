@@ -1,6 +1,6 @@
 {
   "name": "com.entin.staticdata",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "displayName": "Static Data",
   "description": "Static data got from Google Sheet",
   "author": {

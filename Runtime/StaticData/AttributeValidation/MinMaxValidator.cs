@@ -9,7 +9,7 @@ namespace Entin.StaticData.Attributes
     public class MinMaxValidator : IAttributeValidator
     {
         public void Validate<TSheet>(StaticData staticData, ValidationResult validationResult)
-            where TSheet : BaseSheet
+            where TSheet : IBaseSheet
         {
             foreach (PropertyInfo propertyInfo in typeof(TSheet).GetProperties())
             {
@@ -23,7 +23,7 @@ namespace Entin.StaticData.Attributes
         }
 
         private void ValidateMinMax<TSheet>(StaticData staticData, PropertyInfo propertyInfo, Attribute attribute, ValidationResult validationResult)
-            where TSheet : BaseSheet
+            where TSheet : IBaseSheet
         {
             foreach (TSheet baseSheet in staticData.Get<TSheet>())
             {

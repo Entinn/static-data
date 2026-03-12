@@ -1,21 +1,18 @@
+using System;
 using Entin.StaticData.Attributes;
 using Entin.StaticData.Validation;
 
 namespace Entin.StaticData.Sheet.Receivers
 {
-    public abstract class BaseFileReceiver<TSheet> : IDataReceiver
-        where TSheet : BaseSheet
+    public abstract class BaseDataReceiver<TSheet> : IDataReceiver
+        where TSheet : IBaseSheet
     {
-        public string FileName { get; }
+        public abstract Type DataType { get; }
+        public abstract ValidationResult ValidationResult { get; }
 
-        public ValidationResult ValidationResult { get; } = new ValidationResult();
+        public abstract TSheet[] Receive();
 
-        protected internal BaseFileReceiver(string fileName)
-        {
-            FileName = fileName;
-        }
-
-        public void Validate(StaticData staticData)
+        public virtual void Validate(StaticData staticData)
         {
             ValidateAttributes(staticData);
             ValidateData(staticData, ValidationResult);

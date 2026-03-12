@@ -17,7 +17,7 @@ namespace Entin.StaticData.Attributes
         }
 
         public static void Validate<TSheet>(StaticData staticData, ValidationResult validationResult)
-            where TSheet : BaseSheet
+            where TSheet : IBaseSheet
         {
             foreach (IAttributeValidator attributeValidator in Validators)
                 attributeValidator.Validate<TSheet>(staticData, validationResult);

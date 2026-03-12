@@ -11,7 +11,7 @@ namespace Entin.StaticData.Attributes
     public class LinksValidator : IAttributeValidator
     {
         public void Validate<TSheet>(StaticData staticData, ValidationResult validationResult)
-            where TSheet : BaseSheet
+            where TSheet : IBaseSheet
         {
             foreach (PropertyInfo propertyInfo in typeof(TSheet).GetProperties())
             {
@@ -26,7 +26,7 @@ namespace Entin.StaticData.Attributes
         }
 
         private void ValidateLinks<TSheet>(PropertyInfo propertyInfo, StaticData staticData, Type type, string propertyKey, bool canBeEmpty, ValidationResult validationResult)
-            where TSheet : BaseSheet
+            where TSheet : IBaseSheet
         {
             if (!staticData.Receivers.ContainsKey(type))
             {

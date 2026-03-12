@@ -11,7 +11,7 @@ namespace Entin.StaticData.Attributes
     public class UniquenessValidator : IAttributeValidator
     {
         public void Validate<TSheet>(StaticData staticData, ValidationResult validationResult)
-            where TSheet : BaseSheet
+            where TSheet : IBaseSheet
         {
             foreach (PropertyInfo propertyInfo in typeof(TSheet).GetProperties())
             {
@@ -21,10 +21,10 @@ namespace Entin.StaticData.Attributes
         }
 
         private void ValidateUniqueness<TSheet>(StaticData staticData, PropertyInfo propertyInfo, ValidationResult validationResult)
-            where TSheet : BaseSheet
+            where TSheet : IBaseSheet
         {
             HashSet<object> hashSet = new HashSet<object>();
-            IEnumerable<object> values = staticData.Get<TSheet>().Select(propertyInfo.GetValue);
+            IEnumerable<object> values = staticData.Get<TSheet>().Select(x => propertyInfo.GetValue(x));
             foreach (object value in values)
             {
                 if (!hashSet.Add(value))

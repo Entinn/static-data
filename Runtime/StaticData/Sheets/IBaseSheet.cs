@@ -1,6 +1,6 @@
 ﻿namespace Entin.StaticData.Sheet
 {
-    public abstract class BaseSheet
+    public interface IBaseSheet
     {
     }
 }

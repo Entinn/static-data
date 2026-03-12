@@ -10,7 +10,7 @@ namespace Entin.StaticData
 {
     public interface IStaticData
     {
-        IReadOnlyList<TSheet> Get<TSheet>() where TSheet : BaseSheet;
+        IReadOnlyList<TSheet> Get<TSheet>() where TSheet : IBaseSheet;
         IReadOnlyList<TSheet> GetAll<TSheet>();
         IReadOnlyDictionary<TKey, TSheet> GetKeyed<TKey, TSheet>() where TSheet : KeySheet<TKey>;
         TSheet GetKeyed<TKey, TSheet>(TKey key) where TSheet : KeySheet<TKey>;
@@ -28,7 +28,7 @@ namespace Entin.StaticData
 
         public void AddKeyed<TReceiver, TSheet, TKeySheet>()
             where TSheet : KeySheet<TKeySheet>
-            where TReceiver : FileReceiver<TSheet>
+            where TReceiver : BaseDataReceiver<TSheet>
         {
             TReceiver receiver = Activator.CreateInstance<TReceiver>();
             Type type = GetGenericArgument(receiver);
@@ -39,7 +39,7 @@ namespace Entin.StaticData
 
         public void AddKeyValue<TReceiver, TSheet>()
             where TSheet : KeyValueSheet
-            where TReceiver : KeyValueFileReceiver<TSheet>
+            where TReceiver : BaseDataReceiver<TSheet>
         {
             TReceiver receiver = Activator.CreateInstance<TReceiver>();
             Type type = GetGenericArgument(receiver);
@@ -49,8 +49,8 @@ namespace Entin.StaticData
         }
 
         public void Add<TReceiver, TSheet>()
-            where TSheet : BaseSheet
-            where TReceiver : FileReceiver<TSheet>
+            where TSheet : IBaseSheet
+            where TReceiver : BaseDataReceiver<TSheet>
         {
 #if UNITY_EDITOR
             Type baseType = typeof(Resources).BaseType;
@@ -67,18 +67,18 @@ namespace Entin.StaticData
         }
 
         private void Add<TReceiver, TSheet>(Type type, TReceiver receiver)
-            where TSheet : BaseSheet
-            where TReceiver : FileReceiver<TSheet>
+            where TSheet : IBaseSheet
+            where TReceiver : BaseDataReceiver<TSheet>
         {
             AddReceiver(type, receiver);
             AddToAllSheets<TReceiver, TSheet>(type, receiver);
         }
 
         private void AddToAllSheets<TReceiver, TSheet>(Type type, TReceiver receiver)
-            where TSheet : BaseSheet
-            where TReceiver : FileReceiver<TSheet>
+            where TSheet : IBaseSheet
+            where TReceiver : BaseDataReceiver<TSheet>
         {
-            TSheet[] receivedItems = receiver.Receive(GetFile(receiver.FileName));
+            TSheet[] receivedItems = receiver.Receive();
 
             if (_allSheets.TryGetValue(type, out object sheets))
             {
@@ -94,29 +94,14 @@ namespace Entin.StaticData
 
         private void AddToKeyValueAndAllSheets<TReceiver, TSheet>(Type type, TReceiver receiver)
             where TSheet : KeyValueSheet
-            where TReceiver : KeyValueFileReceiver<TSheet>
+            where TReceiver : BaseDataReceiver<TSheet>
         {
-            TSheet receiverItems = receiver.Receive(GetFile(receiver.FileName));
+            TSheet receiverItems = receiver.Receive()[0];
 
             if (!_keyValueSheets.TryAdd(type, receiverItems))
                 Debug.LogError("Key value sheet already added " + type);
 
             _allSheets.Add(type, new List<TSheet>() {receiverItems});
-        }
-
-        private TextAsset GetFile(string fileName)
-        {
-            string path = "Files/" + fileName;
-            return Load<TextAsset>(path);
-        }
-
-        private T Load<T>(string path) where T : UnityEngine.Object
-        {
-            T resource = Resources.Load<T>(path);
-            if (resource == null)
-                Debug.LogError($"Resource {typeof(T)} not found in {path}");
-
-            return resource;
         }
 
         public T GetKeyValue<T>() where T : KeyValueSheet
@@ -126,9 +111,9 @@ namespace Entin.StaticData
 
         private void AddToKeyedSheets<TReceiver, TSheet, TKeySheet>(Type type, TReceiver receiver)
             where TSheet : KeySheet<TKeySheet>
-            where TReceiver : FileReceiver<TSheet>
+            where TReceiver : BaseDataReceiver<TSheet>
         {
-            TSheet[] receiverItems = receiver.Receive(GetFile(receiver.FileName));
+            TSheet[] receiverItems = receiver.Receive();
 
             if (_keyedSheets.TryGetValue(type, out object sheets))
             {
@@ -170,7 +155,7 @@ namespace Entin.StaticData
             return types.First();
         }
 
-        public IReadOnlyList<TSheet> Get<TSheet>() where TSheet : BaseSheet
+        public IReadOnlyList<TSheet> Get<TSheet>() where TSheet : IBaseSheet
         {
             Type type = typeof(TSheet);
 
@@ -241,7 +226,7 @@ namespace Entin.StaticData
 
                         if (receiver.ValidationResult.HasWarning)
                         {
-                            string warningText = $"Validation has warnings in table {receiver.FileName}. Watch below.\n";
+                            string warningText = $"Validation has warnings in table {receiver.DataType.Name}. Watch below.\n";
                             warningText += receiver.ValidationResult.WarningText;
                             Debug.LogWarning(warningText);
                         }
@@ -249,7 +234,7 @@ namespace Entin.StaticData
                         if (receiver.ValidationResult.HasError)
                         {
                             wasError = true;
-                            string errorText = $"Validation failed in table {receiver.FileName}. Watch errors below.\n";
+                            string errorText = $"Validation failed in table {receiver.DataType.Name}. Watch errors below.\n";
                             errorText += receiver.ValidationResult.ErrorText;
                             Debug.LogError(errorText);
                         }
