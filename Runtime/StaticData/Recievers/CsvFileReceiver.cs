@@ -28,7 +28,7 @@ namespace Entin.StaticData.Sheet.Receivers
         {
             TextAsset file = GetFile(FileName);
 
-            if (typeof(TSheet).IsAssignableFrom(typeof(KeyValueSheet)))
+            if (typeof(KeyValueSheet).IsAssignableFrom(typeof(TSheet)))
             {
                 TSheet parsed = Reader.ParseKeyValue<TSheet>(file.text);
                 return new []{ parsed };
